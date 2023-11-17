@@ -10,7 +10,14 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class BlogSerializer(serializers.ModelSerializer):
     Author = AuthorSerializer()
-    
+
     class Meta:
+        model = Blog
+        fields = ['id', 'Content', 'Date', 'Author']
+
+
+class CreateBlogSerializer(serializers.ModelSerializer):
+    class Meta:
+
         model = Blog
         fields = ['id', 'Content', 'Date', 'Author']
