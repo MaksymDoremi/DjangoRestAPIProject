@@ -9,6 +9,28 @@ from rest_framework.decorators import api_view
 #     authors = Author.objects.all()
 #     serializer = AuthorSerializer(authors, many=True)
 #     return JsonResponse(serializer.data)
+@api_view(["GET", "POST"])
+def ApiAuthor(request, format=None):
+    if request.method == "GET":
+        authors = Author.objects.all()
+        serializer = AuthorSerializer(authors, many=True)
+        return Response({"authors": serializer.data})
+
+    if request.method == "POST":
+        serializer = AuthorSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data['id'], status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"message": "Method Not Allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+@api_view(["GET"])
+def ApiAuthorUsername(request, username, format=None):
+    if request.method == "GET":
+        authors = Author.objects.get(Username=username)
+        serializer = AuthorSerializer(authors)
+        return Response(serializer.data)
 
 
 @api_view(["GET", "POST"])

@@ -23,6 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/blog/", views.ApiBlog),
     path("api/blog/blogId/<int:blog_id>", views.ApiBlogId),
+    path("api/author/", views.ApiAuthor, name="api_author"),
+    path("api/author/username/<str:username>", views.ApiAuthorUsername),
     path("", include("BlogApp.urls")),
 ]
 
