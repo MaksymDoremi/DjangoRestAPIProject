@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/blog/", views.ApiBlog),
     path("api/blog/blogId/<int:blog_id>", views.ApiBlogId),
-    # path("api/author/", views.AllAuthors),
+    path("", include("BlogApp.urls")),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
