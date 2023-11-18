@@ -21,10 +21,12 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("api/login/", views.Login, name="api_login"),
+    path("api/registration/", views.Registration, name="api_registration"),
     path("api/blog/", views.ApiBlog),
     path("api/blog/blogId/<int:blog_id>", views.ApiBlogId),
-    path("api/author/", views.ApiAuthor, name="api_author"),
-    path("api/author/username/<str:username>", views.ApiAuthorUsername),
+    path("api/author/", views.ApiAuthor),
+    path("api/author/username/<str:username>", views.ApiAuthorUsername,  name="api_author_username"),
     path("", include("BlogApp.urls")),
 ]
 

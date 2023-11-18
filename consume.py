@@ -1,4 +1,9 @@
 import requests
+from hashlib import sha256
+from dotenv import load_dotenv
+import os
 
-data = requests.get("http://127.0.0.1:8000/api/blog/")
-print(data.json())
+load_dotenv()
+
+print(os.getenv("SECRET_SALT"))
+

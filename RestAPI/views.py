@@ -1,29 +1,25 @@
 from django.http import JsonResponse
+from django.shortcuts import redirect, get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import api_view
 from .models import Author, Blog
 from .serializers import AuthorSerializer, BlogSerializer, CreateBlogSerializer
-from rest_framework.decorators import api_view
+
 
 # def AllAuthors(request):
 #     authors = Author.objects.all()
 #     serializer = AuthorSerializer(authors, many=True)
 #     return JsonResponse(serializer.data)
-@api_view(["GET", "POST"])
+@api_view(["GET"])
 def ApiAuthor(request, format=None):
     if request.method == "GET":
         authors = Author.objects.all()
         serializer = AuthorSerializer(authors, many=True)
         return Response({"authors": serializer.data})
 
-    if request.method == "POST":
-        serializer = AuthorSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data['id'], status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     return Response({"message": "Method Not Allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 @api_view(["GET"])
 def ApiAuthorUsername(request, username, format=None):
@@ -72,3 +68,31 @@ def ApiBlogId(request, blog_id, format=None):
     if request.method == "DELETE":
         blog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(["POST"])
+def Login(request):
+    if request.method == "POST":
+        user = get_object_or_404(Author, Username=request.data['Username'], Password = request.data['Password'])
+        if not user:
+            return Response({"detail":"not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = AuthorSerializer(user)
+        return Response({"user":serializer.data}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def Registration(request):
+    if request.method == "POST":
+        serializer = AuthorSerializer(data=request.data)
+        user = Author.objects.filter(Username=request.data['Username'])
+        if user:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        if serializer.is_valid():
+            serializer.save()
+            user = Author.objects.get(Username=request.data['Username'])
+            user.save()
+            return Response({"user":serializer.data}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"message": "Method Not Allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
