@@ -73,26 +73,31 @@ def ApiBlogId(request, blog_id, format=None):
 @api_view(["POST"])
 def Login(request):
     if request.method == "POST":
-        user = get_object_or_404(Author, Username=request.data['Username'], Password = request.data['Password'])
+        user = get_object_or_404(
+            Author, Username=request.data['Username'], Password=request.data['Password'])
         if not user:
-            return Response({"detail":"not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Incorrect username or password"}, status=status.HTTP_404_NOT_FOUND)
+
         serializer = AuthorSerializer(user)
-        return Response({"user":serializer.data}, status=status.HTTP_200_OK)
+        return Response({"user": serializer.data}, status=status.HTTP_200_OK)
 
 
 @api_view(["POST"])
 def Registration(request):
     if request.method == "POST":
+        # get data from registration form into serializer
         serializer = AuthorSerializer(data=request.data)
+        # get user with that username
         user = Author.objects.filter(Username=request.data['Username'])
+        # if that username exists than return and error
         if user:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response({"error": "User already exists bruh"}, status=status.HTTP_400_BAD_REQUEST)
+
         if serializer.is_valid():
             serializer.save()
             user = Author.objects.get(Username=request.data['Username'])
             user.save()
-            return Response({"user":serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({"user": serializer.data}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     return Response({"message": "Method Not Allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
