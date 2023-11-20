@@ -73,11 +73,12 @@ def ApiBlogId(request, blog_id, format=None):
 @api_view(["POST"])
 def Login(request):
     if request.method == "POST":
-        user = get_object_or_404(
-            Author, Username=request.data['Username'], Password=request.data['Password'])
+        user = Author(Username=request.data['Username'], Password=request.data['Password'])
         if not user:
+            print(f"{request.data['Password']}")
             return Response({"error": "Incorrect username or password"}, status=status.HTTP_404_NOT_FOUND)
 
+        
         serializer = AuthorSerializer(user)
         return Response({"user": serializer.data}, status=status.HTTP_200_OK)
 

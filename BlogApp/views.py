@@ -34,10 +34,15 @@ def Login(request):
         response = requests.post(url, data=AuthorSerializer(author).data)
 
         if response.status_code == 200:
+            print(response.json().get("user", {}).get("Username"))
+            request.session['id'] = response.json().get('user', {}).get('id')
+            request.session['Username'] = response.json().get('user', {}).get("Username")
+            request.session['Name'] = response.json().get('user', {}).get("Name")
+            request.session['Surname'] = response.json().get('user', {}).get("Surname")
             return redirect("homePage")
         else:
             print(response.content)
-            error_message = response.json().get("detail")
+            error_message = response.json().get("error")
             print(error_message)
             return render(request, 'login.html', {'error_message': error_message})
 
@@ -79,4 +84,14 @@ def Registration(request):
 
 def HomePage(request):
     if request.method == "GET":
-        return HttpResponse("Login successful")
+        if "Username" in request.session.keys():
+            return render(request, "homePage.html", {"Username": request.session["Username"]})
+        else:
+            return redirect("login")
+
+
+def Logout(request):
+    if request.method == "POST":
+        del request.session['Username']
+        request.session.modified = True
+        return render(request, 'logout.html')

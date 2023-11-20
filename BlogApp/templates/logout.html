@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <script>
+        alert('You were logged out');
+        setTimeout(function() {
+            window.location.href = '{% url "login" %}';  // Use Django's URL template tag to dynamically generate the login URL
+        }, 0);
+    </script>
+</head>
+<body>
+    <!-- You can add a message or additional content here if needed -->
+</body>
+</html>
