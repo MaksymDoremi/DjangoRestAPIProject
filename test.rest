@@ -8,4 +8,11 @@ Content-Type: application/json
 POST http://127.0.0.1:8000/api/login/
 Content-Type: application/json
 
-{ "Username": "admin", "Password": "4936b99e4ca15181f78afcda2f477574d75f926e4f68e9f4c2d30a8627c9d85c" }
+{ "Username": "kinto", "Password": "4936b99e4ca15181f78afcda2f477574d75f926e4f68e9f4c2d30a8627c9d85c" }
+
+
+###
+POST http://127.0.0.1:8000/api/blog/
+Content-Type: application/json
+
+{"Content": "SUPER BLOG", "Date": "2023-11-17","Author": 1}

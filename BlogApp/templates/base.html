@@ -27,9 +27,9 @@
 
   <body style="min-width: 450px; " class="d-flex flex-column min-vh-100">
     <!-- NAVBAR -->
-    <nav class="navbar bg-body-tertiary d-flex justify-content-center" style="background-color: rgb(192, 192, 192); height: 100px;">
-      <div style="position: relative; top: -2px; z-index: 1;">
-        <span class="navbar-brand mb-0 h1"></span>
+    <nav class="navba d-flex justify-content-start" style="background-color: rgb(192, 192, 192); height: 100px;">
+        {% block buttons %}
+        {% endblock buttons %}
       </div>
     </nav>
     {% comment %}Success alert{% endcomment %}
